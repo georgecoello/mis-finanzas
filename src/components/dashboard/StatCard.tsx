@@ -13,6 +13,11 @@ interface StatCardProps {
   };
 }
 
+import React from "react";
+import { Pencil } from "lucide-react";
+import StatEditModal from "@/components/dashboard/StatEditModal";
+import { useTransactions } from "@/context/TransactionContext";
+
 const StatCard = ({ 
   title, 
   value, 
@@ -35,16 +40,55 @@ const StatCard = ({
     expense: "bg-white/20 text-white",
   };
 
+  const editButtonStyles = {
+    default: "hover:bg-primary/10 text-primary",
+    primary: "hover:bg-white/10 text-white",
+    success: "hover:bg-white/10 text-white",
+    expense: "hover:bg-white/10 text-white",
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const { setStat, stats } = useTransactions() as any;
+
+  const statKeyMap: Record<string, any> = {
+    "Ingresos del Mes": "ingresosMes",
+  };
+
+  const key = statKeyMap[title];
+
+  function onConfirm(v: string) {
+    if (!key) return;
+    if (key === "ahorroMeta") setStat(key, v);
+    else {
+      const num = Number(v.toString().replace(/[^0-9.-]+/g, ""));
+      if (!isNaN(num)) setStat(key, num);
+    }
+  }
+
   return (
     <div className={cn("stat-card animate-fade-in", variantStyles[variant])}>
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className={cn(
-            "text-sm font-medium",
-            variant === "default" ? "text-muted-foreground" : "text-white/80"
-          )}>
-            {title}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className={cn(
+              "text-sm font-medium",
+              variant === "default" ? "text-muted-foreground" : "text-white/80"
+            )}>
+              {title}
+            </p>
+            {key && (
+              <button 
+                className={cn(
+                  "p-1.5 rounded-lg transition-colors duration-200",
+                  editButtonStyles[variant]
+                )} 
+                aria-label={`Editar ${title}`} 
+                onClick={() => setOpen(true)}
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+            )}
+          </div>
           <p className="text-2xl font-bold font-display">{value}</p>
           {subtitle && (
             <p className={cn(
@@ -75,6 +119,17 @@ const StatCard = ({
           <Icon className="h-5 w-5" />
         </div>
       </div>
+
+      {key && (
+        <StatEditModal
+          open={open}
+          onOpenChange={(o) => setOpen(o)}
+          title={title}
+          currentValue={String((stats as any)?.[key] ?? value)}
+          onConfirm={onConfirm}
+          placeholder={key === "ahorroMeta" ? "68%" : "L. 0.00"}
+        />
+      )}
     </div>
   );
 };

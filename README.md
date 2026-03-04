@@ -1,24 +1,5 @@
-# Welcome to your Lovable project
+# Welcome to your Mis Finanzas project
 
-## Project info
-
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 Follow these steps:
 
@@ -60,14 +41,21 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Funcionalidades añadidas (rápido)
 
-## Can I connect a custom domain to my Lovable project?
+- Gestión de transacciones en memoria y persistidas con `localStorage` (`src/context/TransactionContext.tsx`).
+- Añadir transacciones desde el formulario en el sidebar (`AddTransactionForm`).
+- Acciones rápidas que abren un modal interactivo para introducir cantidades y detalles (`QuickActions` + `ActionModal`).
+- Los gráficos (`ExpenseChart`, `MonthlyChart`) y las tarjetas de estadísticas ahora consumen los datos reales del contexto.
 
-Yes, you can!
+Para probarlo:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Ejecuta `npm i` y `npm run dev`.
+2. En la vista principal, usa el formulario a la derecha para añadir una transacción.
+3. Usa "Acciones Rápidas" para generar transacciones de ejemplo.
+4. Los gráficos y los totales se actualizan automáticamente.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+

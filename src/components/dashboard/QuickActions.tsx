@@ -1,7 +1,9 @@
+import React from "react";
 import { ArrowUpRight, ArrowDownLeft, RefreshCw, PiggyBank } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ActionModal, { ActionKind } from "@/components/dashboard/ActionModal";
 
-const actions = [
+const actions: { icon: any; label: ActionKind; color: string }[] = [
   { icon: ArrowUpRight, label: "Enviar", color: "bg-primary/10 text-primary hover:bg-primary/20" },
   { icon: ArrowDownLeft, label: "Recibir", color: "bg-success/10 text-success hover:bg-success/20" },
   { icon: RefreshCw, label: "Transferir", color: "bg-warning/10 text-warning hover:bg-warning/20" },
@@ -9,23 +11,34 @@ const actions = [
 ];
 
 const QuickActions = () => {
+  const [open, setOpen] = React.useState(false);
+  const [action, setAction] = React.useState<ActionKind | null>(null);
+
+  function openFor(a: ActionKind) {
+    setAction(a);
+    setOpen(true);
+  }
+
   return (
     <div className="glass-card p-6 animate-fade-in" style={{ animationDelay: "0.5s" }}>
       <h2 className="text-lg font-semibold font-display mb-4">Acciones Rápidas</h2>
       <div className="grid grid-cols-2 gap-3">
-        {actions.map((action, index) => (
+        {actions.map((actionDef, index) => (
           <button
             key={index}
+            onClick={() => openFor(actionDef.label)}
             className={cn(
               "flex flex-col items-center justify-center p-4 rounded-xl transition-all duration-200",
-              action.color
+              actionDef.color
             )}
           >
-            <action.icon className="h-6 w-6 mb-2" />
-            <span className="text-sm font-medium">{action.label}</span>
+            <actionDef.icon className="h-6 w-6 mb-2" />
+            <span className="text-sm font-medium">{actionDef.label}</span>
           </button>
         ))}
       </div>
+
+      <ActionModal open={open} action={action} onOpenChange={(o) => setOpen(o)} />
     </div>
   );
 };

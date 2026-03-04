@@ -1,15 +1,31 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useTransactions } from "@/context/TransactionContext";
+import { formatCurrency } from "@/lib/utils";
 
-const data = [
-  { month: "Ene", ingresos: 3200, gastos: 1800 },
-  { month: "Feb", ingresos: 3400, gastos: 2100 },
-  { month: "Mar", ingresos: 3100, gastos: 1900 },
-  { month: "Abr", ingresos: 3800, gastos: 2200 },
-  { month: "May", ingresos: 4200, gastos: 2400 },
-  { month: "Jun", ingresos: 4300, gastos: 2100 },
-];
+const MONTH_NAMES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+function monthKey(date: string) {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${d.getMonth()}`;
+}
 
 const MonthlyChart = () => {
+  const { transactions } = useTransactions();
+
+  // Build last 6 months keys
+  const now = new Date();
+  const months: { key: string; label: string }[] = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({ key: `${d.getFullYear()}-${d.getMonth()}`, label: MONTH_NAMES[d.getMonth()] });
+  }
+
+  const data = months.map(m => {
+    const ingresos = transactions.filter(t => t.type === "income" && monthKey(t.date) === m.key).reduce((s, t) => s + t.amount, 0);
+    const gastos = transactions.filter(t => t.type === "expense" && monthKey(t.date) === m.key).reduce((s, t) => s + t.amount, 0);
+    return { month: m.label, ingresos, gastos };
+  });
+
   return (
     <div className="glass-card p-6 animate-fade-in" style={{ animationDelay: "0.4s" }}>
       <h2 className="text-lg font-semibold font-display mb-6">Resumen Mensual</h2>
@@ -40,7 +56,7 @@ const MonthlyChart = () => {
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip 
-              formatter={(value: number) => [`$${value}`, ""]}
+              formatter={(value: number) => [formatCurrency(value), ""]}
               contentStyle={{
                 backgroundColor: "hsl(var(--card))",
                 border: "1px solid hsl(var(--border))",

@@ -5,40 +5,53 @@ import TransactionList from "@/components/dashboard/TransactionList";
 import ExpenseChart from "@/components/dashboard/ExpenseChart";
 import MonthlyChart from "@/components/dashboard/MonthlyChart";
 import QuickActions from "@/components/dashboard/QuickActions";
+import AddTransactionForm from "@/components/dashboard/AddTransactionForm";
+import { TransactionProvider, useTransactions } from "@/context/TransactionContext";
+import { formatCurrency } from "@/lib/utils";
 
-const Index = () => {
+const Inner = () => {
+  const { transactions, stats } = useTransactions();
+
+  const computedBalance = transactions.reduce((s, t) => s + (t.type === "income" ? t.amount : -t.amount), 0);
+  const now = new Date();
+  const computedIngresosMes = transactions.filter(t => t.type === "income" && new Date(t.date).getMonth() === now.getMonth() && new Date(t.date).getFullYear() === now.getFullYear()).reduce((s, t) => s + t.amount, 0);
+  const computedGastosMes = transactions.filter(t => t.type === "expense" && new Date(t.date).getMonth() === now.getMonth() && new Date(t.date).getFullYear() === now.getFullYear()).reduce((s, t) => s + t.amount, 0);
+
+  const balance = stats?.balance ?? computedBalance;
+  const ingresosMes = stats?.ingresosMes ?? computedIngresosMes;
+  const gastosMes = stats?.gastosMes ?? computedGastosMes;
+  
+  // Calcular ahorro
+  const ahorroMontoMes = ingresosMes - gastosMes;
+  const ahorroPercentaje = ingresosMes > 0 ? ((ahorroMontoMes / ingresosMes) * 100).toFixed(1) : 0;
+
+  const fmt = (v: number) => formatCurrency(v);
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Header />
         
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <StatCard
-            title="Balance Total"
-            value="$12,450.80"
-            subtitle="Todas las cuentas"
-            icon={Wallet}
-            variant="primary"
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <StatCard
             title="Ingresos del Mes"
-            value="$4,300.00"
+            value={fmt(ingresosMes)}
             icon={TrendingUp}
             variant="success"
-            trend={{ value: 12.5, isPositive: true }}
+            trend={{ value: Number(((ingresosMes / (gastosMes || 1)) * 100).toFixed(1)), isPositive: ingresosMes >= gastosMes }}
           />
           <StatCard
             title="Gastos del Mes"
-            value="$2,150.50"
+            value={fmt(gastosMes)}
             icon={TrendingDown}
             variant="expense"
-            trend={{ value: 3.2, isPositive: false }}
+            trend={{ value: Number(((gastosMes / (ingresosMes || 1)) * 100).toFixed(1)), isPositive: gastosMes <= ingresosMes }}
           />
           <StatCard
             title="Meta de Ahorro"
-            value="68%"
-            subtitle="$6,800 de $10,000"
+            value={`${ahorroPercentaje}%`}
+            subtitle={`${fmt(ahorroMontoMes)} disponible`}
             icon={Target}
           />
         </div>
@@ -53,12 +66,21 @@ const Index = () => {
 
           {/* Right Column - Sidebar */}
           <div className="space-y-6">
+            <AddTransactionForm />
             <ExpenseChart />
             <QuickActions />
           </div>
         </div>
       </div>
     </div>
+  );
+};
+
+const Index = () => {
+  return (
+    <TransactionProvider>
+      <Inner />
+    </TransactionProvider>
   );
 };
 

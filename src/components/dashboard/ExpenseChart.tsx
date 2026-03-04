@@ -1,15 +1,30 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { useTransactions } from "@/context/TransactionContext";
+import { formatCurrency } from "@/lib/utils";
 
-const data = [
-  { name: "Alimentación", value: 450, color: "hsl(221, 83%, 53%)" },
-  { name: "Transporte", value: 280, color: "hsl(152, 69%, 40%)" },
-  { name: "Entretenimiento", value: 200, color: "hsl(38, 92%, 50%)" },
-  { name: "Compras", value: 320, color: "hsl(280, 65%, 60%)" },
-  { name: "Servicios", value: 180, color: "hsl(0, 72%, 63%)" },
-];
+const CATEGORY_COLORS: Record<string, string> = {
+  "Alimentación": "hsl(221, 83%, 53%)",
+  "Transporte": "hsl(152, 69%, 40%)",
+  "Entretenimiento": "hsl(38, 92%, 50%)",
+  "Compras": "hsl(280, 65%, 60%)",
+  "Servicios": "hsl(0, 72%, 63%)",
+  "Café": "hsl(280, 65%, 60%)",
+  "Salario": "hsl(152, 69%, 40%)",
+  "Freelance": "hsl(38, 92%, 50%)",
+};
 
 const ExpenseChart = () => {
-  const total = data.reduce((acc, item) => acc + item.value, 0);
+  const { transactions } = useTransactions();
+
+  const categoryMap: Record<string, number> = {};
+  transactions.forEach(t => {
+    if (t.type === "expense") {
+      categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount;
+    }
+  });
+
+  const data = Object.keys(categoryMap).map(name => ({ name, value: categoryMap[name], color: CATEGORY_COLORS[name] || "hsl(0, 72%, 63%)" }));
+  const total = data.reduce((acc, item) => acc + item.value, 0) || 1;
 
   return (
     <div className="glass-card p-6 animate-fade-in" style={{ animationDelay: "0.3s" }}>
@@ -54,7 +69,7 @@ const ExpenseChart = () => {
               <span className="text-muted-foreground">{item.name}</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="font-medium">${item.value}</span>
+              <span className="font-medium">{formatCurrency(item.value)}</span>
               <span className="text-muted-foreground text-xs w-12 text-right">
                 {((item.value / total) * 100).toFixed(0)}%
               </span>
