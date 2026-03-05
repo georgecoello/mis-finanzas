@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { useTransactions } from "@/context/TransactionContext";
 import { useToast } from "@/hooks/use-toast";
 
-const CATEGORIES = ["Alimentación", "Transporte", "Compras", "Hogar", "Café", "Salario", "Freelance", "Servicios", "Ahorro"];
+const CATEGORIES = ["Alimentación", "Transporte", "Compras", "Hogar", "Café", "Salario", "Freelance", "Servicios", "Ahorro", "Farmacia", "Rancho", "Recargas", "Tarjeta"];
 
 export type ActionKind = "Enviar" | "Recibir" | "Transferir" | "Ahorrar";
 

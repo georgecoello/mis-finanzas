@@ -1,4 +1,4 @@
-import { ArrowDownLeft, ArrowUpRight, Coffee, Home, ShoppingBag, Car, Utensils, Briefcase, DollarSign, Trash2 } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Coffee, Home, ShoppingBag, Car, Utensils, Briefcase, DollarSign, Trash2, Pill, Smartphone, CreditCard } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 import { useTransactions } from "@/context/TransactionContext";
 
@@ -10,6 +10,10 @@ const categoryIcons: Record<string, React.ComponentType<{ className?: string }>>
   "Café": Coffee,
   "Salario": Briefcase,
   "Freelance": DollarSign,
+  "Farmacia": Pill,
+  "Rancho": DollarSign,
+  "Recargas": Smartphone,
+  "Tarjeta": CreditCard,
 };
 
 const TransactionList = () => {

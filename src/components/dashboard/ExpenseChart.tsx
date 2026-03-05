@@ -3,14 +3,20 @@ import { useTransactions } from "@/context/TransactionContext";
 import { formatCurrency } from "@/lib/utils";
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Alimentación": "hsl(221, 83%, 53%)",
-  "Transporte": "hsl(152, 69%, 40%)",
-  "Entretenimiento": "hsl(38, 92%, 50%)",
-  "Compras": "hsl(280, 65%, 60%)",
-  "Servicios": "hsl(0, 72%, 63%)",
-  "Café": "hsl(280, 65%, 60%)",
+  "Alimentación": "hsl(38, 92%, 50%)",
+  "Transporte": "hsl(280, 85%, 50%)",
+  "Compras": "hsl(190, 100%, 50%)",
+  "Hogar": "hsl(120, 60%, 50%)",
+  "Café": "hsl(25, 100%, 50%)",
   "Salario": "hsl(152, 69%, 40%)",
-  "Freelance": "hsl(38, 92%, 50%)",
+  "Freelance": "hsl(270, 85%, 60%)",
+  "Servicios": "hsl(0, 100%, 50%)",
+  "Entretenimiento": "hsl(38, 92%, 50%)",
+  "Ahorro": "hsl(152, 69%, 40%)",
+  "Farmacia": "hsl(120, 100%, 40%)",
+  "Rancho": "hsl(10, 100%, 50%)",
+  "Recargas": "hsl(200, 100%, 45%)",
+  "Tarjeta": "hsl(240, 15%, 60%)",
 };
 
 const ExpenseChart = () => {
@@ -47,7 +53,7 @@ const ExpenseChart = () => {
               ))}
             </Pie>
             <Tooltip 
-              formatter={(value: number) => [`$${value}`, ""]}
+              formatter={(value: number) => [`L. ${value}`, ""]}
               contentStyle={{
                 backgroundColor: "hsl(var(--card))",
                 border: "1px solid hsl(var(--border))",

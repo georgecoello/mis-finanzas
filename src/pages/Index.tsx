@@ -4,7 +4,6 @@ import StatCard from "@/components/dashboard/StatCard";
 import TransactionList from "@/components/dashboard/TransactionList";
 import ExpenseChart from "@/components/dashboard/ExpenseChart";
 import MonthlyChart from "@/components/dashboard/MonthlyChart";
-import QuickActions from "@/components/dashboard/QuickActions";
 import AddTransactionForm from "@/components/dashboard/AddTransactionForm";
 import { TransactionProvider, useTransactions } from "@/context/TransactionContext";
 import { formatCurrency } from "@/lib/utils";
@@ -68,7 +67,6 @@ const Inner = () => {
           <div className="space-y-6">
             <AddTransactionForm />
             <ExpenseChart />
-            <QuickActions />
           </div>
         </div>
       </div>

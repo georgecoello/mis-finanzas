@@ -3,7 +3,7 @@ import { useTransactions } from "@/context/TransactionContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
 
-const CATEGORIES = ["Alimentación", "Transporte", "Compras", "Hogar", "Café", "Salario", "Freelance"];
+const CATEGORIES = ["Alimentación", "Transporte", "Compras", "Hogar", "Café", "Salario", "Freelance", "Farmacia", "Rancho", "Recargas", "Tarjeta"];
 
 const AddTransactionForm: React.FC<{ onAdded?: () => void }> = ({ onAdded }) => {
   const { addTransaction } = useTransactions();

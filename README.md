@@ -47,7 +47,7 @@ This project is built with:
 
 - Gestión de transacciones en memoria y persistidas con `localStorage` (`src/context/TransactionContext.tsx`).
 - Añadir transacciones desde el formulario en el sidebar (`AddTransactionForm`).
-- Acciones rápidas que abren un modal interactivo para introducir cantidades y detalles (`QuickActions` + `ActionModal`).
+- Formulario de transacciones para añadir ingresos y gastos.
 - Los gráficos (`ExpenseChart`, `MonthlyChart`) y las tarjetas de estadísticas ahora consumen los datos reales del contexto.
 
 Para probarlo:
